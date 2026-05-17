@@ -73,13 +73,15 @@ python check_all.py
 ```
 
 You should see all registers with values. If you only see TIMEOUT:
-- Check the EW11A mode (must be Modbus TCP)
+- Check the EW11A mode (must be 'None')
 - Check the IP address and port
 - Check the slave ID
 
 ---
 
 ## Step 5: Home Assistant configuration
+
+!!!! Set EW11A mode to modbus again !!!! or else ha won't find anything
 
 ### 5a. Enable packages
 
