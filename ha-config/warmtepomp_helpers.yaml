@@ -1,0 +1,179 @@
+# ==============================================================
+# WARMTEPOMP HELPERS
+# Zet dit in /config/packages/warmtepomp_helpers.yaml
+# OF voeg toe aan je bestaande helpers sectie
+# ==============================================================
+
+input_select:
+  warmtepomp_modus:
+    name: "Warmtepomp Werkingsmodus"
+    options:
+      - "Koelen"
+      - "Verwarmen"
+      - "Auto"
+    initial: "Verwarmen"
+    icon: mdi:heat-pump
+
+input_number:
+  warmtepomp_setpoint_verwarmen:
+    name: "Warmtepomp Setpoint Verwarmen"
+    min: 15
+    max: 40
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer-chevron-up
+    mode: slider
+
+  warmtepomp_setpoint_koelen:
+    name: "Warmtepomp Setpoint Koelen"
+    min: 15
+    max: 35
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer-chevron-down
+    mode: slider
+
+  warmtepomp_setpoint_auto:
+    name: "Warmtepomp Setpoint Auto"
+    min: 15
+    max: 40
+    step: 0.5
+    unit_of_measurement: "°C"
+    icon: mdi:thermometer-auto
+    mode: slider
+
+# ==============================================================
+# AUTOMATIONS
+# ==============================================================
+automation:
+
+  # --- Sync helpers vanuit Modbus bij opstarten / wijziging ---
+
+  - id: wp_sync_modus_van_modbus
+    alias: "Warmtepomp: Sync modus van Modbus"
+    trigger:
+      - platform: state
+        entity_id: sensor.warmtepomp_instelling_modus
+      - platform: homeassistant
+        event: start
+    action:
+      - service: input_select.select_option
+        target:
+          entity_id: input_select.warmtepomp_modus
+        data:
+          option: >
+            {% set m = states('sensor.warmtepomp_instelling_modus') | int(-1) %}
+            {% if m == 0 %} Koelen
+            {% elif m == 1 %} Verwarmen
+            {% elif m == 2 %} Auto
+            {% else %} Verwarmen {% endif %}
+
+  - id: wp_sync_setpoint_verwarmen_van_modbus
+    alias: "Warmtepomp: Sync setpoint verwarmen van Modbus"
+    trigger:
+      - platform: state
+        entity_id: sensor.warmtepomp_setpoint_verwarmen
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.warmtepomp_setpoint_verwarmen') not in ['unavailable','unknown',''] }}"
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.warmtepomp_setpoint_verwarmen
+        data:
+          value: "{{ states('sensor.warmtepomp_setpoint_verwarmen') | float }}"
+
+  - id: wp_sync_setpoint_koelen_van_modbus
+    alias: "Warmtepomp: Sync setpoint koelen van Modbus"
+    trigger:
+      - platform: state
+        entity_id: sensor.warmtepomp_setpoint_koelen
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.warmtepomp_setpoint_koelen') not in ['unavailable','unknown',''] }}"
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.warmtepomp_setpoint_koelen
+        data:
+          value: "{{ states('sensor.warmtepomp_setpoint_koelen') | float }}"
+
+  - id: wp_sync_setpoint_auto_van_modbus
+    alias: "Warmtepomp: Sync setpoint auto van Modbus"
+    trigger:
+      - platform: state
+        entity_id: sensor.warmtepomp_setpoint_auto
+      - platform: homeassistant
+        event: start
+    condition:
+      - condition: template
+        value_template: "{{ states('sensor.warmtepomp_setpoint_auto') not in ['unavailable','unknown',''] }}"
+    action:
+      - service: input_number.set_value
+        target:
+          entity_id: input_number.warmtepomp_setpoint_auto
+        data:
+          value: "{{ states('sensor.warmtepomp_setpoint_auto') | float }}"
+
+  # --- Schrijf naar Modbus als helper wijzigt ---
+
+  - id: wp_schrijf_modus_naar_modbus
+    alias: "Warmtepomp: Schrijf modus naar Modbus"
+    trigger:
+      - platform: state
+        entity_id: input_select.warmtepomp_modus
+    action:
+      - service: modbus.write_register
+        data:
+          hub: zwembad_warmtepomp
+          slave: 50
+          address: 1012
+          value: >
+            {% set m = states('input_select.warmtepomp_modus') %}
+            {% if m == 'Koelen' %} 0
+            {% elif m == 'Verwarmen' %} 1
+            {% elif m == 'Auto' %} 2
+            {% else %} 1 {% endif %}
+
+  - id: wp_schrijf_setpoint_verwarmen_naar_modbus
+    alias: "Warmtepomp: Schrijf setpoint verwarmen naar Modbus"
+    trigger:
+      - platform: state
+        entity_id: input_number.warmtepomp_setpoint_verwarmen
+    action:
+      - service: modbus.write_register
+        data:
+          hub: zwembad_warmtepomp
+          slave: 50
+          address: 1136
+          value: "{{ (states('input_number.warmtepomp_setpoint_verwarmen') | float * 10) | int }}"
+
+  - id: wp_schrijf_setpoint_koelen_naar_modbus
+    alias: "Warmtepomp: Schrijf setpoint koelen naar Modbus"
+    trigger:
+      - platform: state
+        entity_id: input_number.warmtepomp_setpoint_koelen
+    action:
+      - service: modbus.write_register
+        data:
+          hub: zwembad_warmtepomp
+          slave: 50
+          address: 1135
+          value: "{{ (states('input_number.warmtepomp_setpoint_koelen') | float * 10) | int }}"
+
+  - id: wp_schrijf_setpoint_auto_naar_modbus
+    alias: "Warmtepomp: Schrijf setpoint auto naar Modbus"
+    trigger:
+      - platform: state
+        entity_id: input_number.warmtepomp_setpoint_auto
+    action:
+      - service: modbus.write_register
+        data:
+          hub: zwembad_warmtepomp
+          slave: 50
+          address: 1137
+          value: "{{ (states('input_number.warmtepomp_setpoint_auto') | float * 10) | int }}"

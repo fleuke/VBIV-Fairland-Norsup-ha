@@ -1,0 +1,529 @@
+# ==============================================================
+# FAIRLAND VBIV - EW11A Modbus TCP - VERSIE 4
+# FIXES:
+#   - numbers: unique_id verwijderd + scan_interval toegevoegd
+#   - selects: unique_id verwijderd + scan_interval toegevoegd
+#   - vermogen: V*A berekend in template (register 2056 = vast)
+#   - climate: vereenvoudigd zonder hvac_mode_register
+# ==============================================================
+
+  - name: "zwembad_warmtepomp"
+    type: tcp
+    host: 192.168.178.254
+    port: 8899
+    timeout: 5
+    delay: 2
+    message_wait_milliseconds: 150
+
+    sensors:
+
+      - name: "Warmtepomp Status AanUit"
+        unique_id: wp_status_onoff
+        slave: 50
+        address: 2011
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Status Modus"
+        unique_id: wp_status_mode
+        slave: 50
+        address: 2012
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Output Bits"
+        unique_id: wp_output_bits
+        slave: 50
+        address: 2019
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Switch Bits"
+        unique_id: wp_switch_bits
+        slave: 50
+        address: 2034
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+
+      - name: "Warmtepomp T01 Zuiggas"
+        unique_id: wp_t01_suction
+        slave: 50
+        address: 2045
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T02 Inlaat Water"
+        unique_id: wp_t02_inlet_water
+        slave: 50
+        address: 2046
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T03 Uitlaat Water"
+        unique_id: wp_t03_outlet_water
+        slave: 50
+        address: 2047
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T04 Coil"
+        unique_id: wp_t04_coil
+        slave: 50
+        address: 2048
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T05 Buiten"
+        unique_id: wp_t05_ambient
+        slave: 50
+        address: 2049
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T06 Persgas"
+        unique_id: wp_t06_exhaust
+        slave: 50
+        address: 2050
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T11 Superheat"
+        unique_id: wp_t11_superheat
+        slave: 50
+        address: 2060
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp T15 Antivorst"
+        unique_id: wp_t15_antifreeze
+        slave: 50
+        address: 2065
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp IPM Temperatuur"
+        unique_id: wp_ipm_temp
+        slave: 50
+        address: 2023
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 1
+        precision: 0
+        state_class: measurement
+
+      - name: "Warmtepomp Spanning"
+        unique_id: wp_voltage
+        slave: 50
+        address: 2063
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "V"
+        device_class: voltage
+        scale: 1
+        precision: 0
+        state_class: measurement
+
+      - name: "Warmtepomp Stroom"
+        unique_id: wp_current
+        slave: 50
+        address: 2022
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "A"
+        device_class: current
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp Compressor Frequentie"
+        unique_id: wp_comp_freq
+        slave: 50
+        address: 2021
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "Hz"
+        state_class: measurement
+
+      - name: "Warmtepomp Druk"
+        unique_id: wp_pressure
+        slave: 50
+        address: 2054
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "bar"
+        scale: 0.1
+        precision: 1
+        state_class: measurement
+
+      - name: "Warmtepomp EEV Positie"
+        unique_id: wp_eev_pos
+        slave: 50
+        address: 2020
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "stappen"
+        state_class: measurement
+
+      - name: "Warmtepomp Ventilator 1"
+        unique_id: wp_fan1_rpm
+        slave: 50
+        address: 2067
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "RPM"
+        state_class: measurement
+
+      - name: "Warmtepomp Ventilator 2"
+        unique_id: wp_fan2_rpm
+        slave: 50
+        address: 2068
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "RPM"
+        state_class: measurement
+
+      - name: "Warmtepomp Instelling AanUit"
+        unique_id: wp_set_onoff
+        slave: 50
+        address: 1011
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Instelling Modus"
+        unique_id: wp_set_mode
+        slave: 50
+        address: 1012
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Setpoint Huidig"
+        unique_id: wp_setpoint_current
+        slave: 50
+        address: 1013
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+
+      - name: "Warmtepomp Setpoint Koelen"
+        unique_id: wp_setpoint_cooling
+        slave: 50
+        address: 1135
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+
+      - name: "Warmtepomp Setpoint Verwarmen"
+        unique_id: wp_setpoint_heating
+        slave: 50
+        address: 1136
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+
+      - name: "Warmtepomp Setpoint Auto"
+        unique_id: wp_setpoint_auto
+        slave: 50
+        address: 1137
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+        unit_of_measurement: "°C"
+        device_class: temperature
+        scale: 0.1
+        precision: 1
+
+      - name: "Warmtepomp Max Frequentie"
+        unique_id: wp_max_freq
+        slave: 50
+        address: 1022
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+        unit_of_measurement: "Hz"
+
+      - name: "Warmtepomp Stille Modus Status"
+        unique_id: wp_silent_status
+        slave: 50
+        address: 1076
+        input_type: holding
+        scan_interval: 60
+        data_type: int16
+
+      - name: "Warmtepomp Fout Register 1"
+        unique_id: wp_fault_1
+        slave: 50
+        address: 2074
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+
+      - name: "Warmtepomp Fout Register 2"
+        unique_id: wp_fault_2
+        slave: 50
+        address: 2075
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+
+      - name: "Warmtepomp Fout Register 3"
+        unique_id: wp_fault_3
+        slave: 50
+        address: 2076
+        input_type: holding
+        scan_interval: 120
+        data_type: int16
+
+    # ==========================================================
+    # SCHAKELAARS
+    # ==========================================================
+    switches:
+      - name: "Warmtepomp Hoofdschakelaar"
+        unique_id: wp_switch_main
+        slave: 50
+        address: 1011
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        scan_interval: 60
+
+      - name: "Warmtepomp Stille Modus Schakelaar"
+        unique_id: wp_switch_silent
+        slave: 50
+        address: 1076
+        write_type: holding
+        command_on: 1
+        command_off: 0
+        scan_interval: 60
+
+    # ==========================================================
+    # SELECT - geen unique_id zodat HA zelf ID aanmaakt
+    # ==========================================================
+    selects:
+      - name: "Warmtepomp Werkingsmodus"
+        slave: 50
+        address: 1012
+        write_type: holding
+        scan_interval: 60
+        options:
+          - "Koelen"
+          - "Verwarmen"
+          - "Auto"
+        select_options_mapping:
+          "Koelen": 0
+          "Verwarmen": 1
+          "Auto": 2
+
+    # ==========================================================
+    # NUMBERS - geen unique_id, met scan_interval
+    # ==========================================================
+    numbers:
+      - name: "Warmtepomp Setpoint Koelen Instellen"
+        slave: 50
+        address: 1135
+        data_type: int16
+        min: 15
+        max: 35
+        step: 0.5
+        scale: 0.1
+        unit_of_measurement: "°C"
+        scan_interval: 60
+
+      - name: "Warmtepomp Setpoint Verwarmen Instellen"
+        slave: 50
+        address: 1136
+        data_type: int16
+        min: 15
+        max: 40
+        step: 0.5
+        scale: 0.1
+        unit_of_measurement: "°C"
+        scan_interval: 60
+
+      - name: "Warmtepomp Setpoint Auto Instellen"
+        slave: 50
+        address: 1137
+        data_type: int16
+        min: 15
+        max: 40
+        step: 0.5
+        scale: 0.1
+        unit_of_measurement: "°C"
+        scan_interval: 60
+
+    # ==========================================================
+    # CLIMATE
+    # ==========================================================
+    climates:
+      - name: "Pool Warmtepomp Modbus"
+        unique_id: wp_climate_modbus
+        slave: 50
+        address: 2046
+        input_type: holding
+        data_type: int16
+        scale: 0.1
+        precision: 1
+        max_temp: 40
+        min_temp: 15
+        temp_step: 0.5
+        temperature_unit: C
+        target_temp_register: 1013
+        target_temp_write_registers: true
+        hvac_onoff_register: 1011
+
+# ==============================================================
+# TEMPLATE SENSOREN
+# ==============================================================
+template:
+  - sensor:
+      - name: "Warmtepomp Modus Tekst"
+        unique_id: wp_mode_text
+        icon: mdi:heat-pump
+        state: >
+          {% set aan = states('sensor.warmtepomp_status_aanuit') | int(-1) %}
+          {% set mode = states('sensor.warmtepomp_status_modus') | int(-1) %}
+          {% if aan == 0 %} Uit
+          {% elif mode == 0 %} Koelen
+          {% elif mode == 1 %} Verwarmen
+          {% elif mode == 2 %} Auto
+          {% else %} Onbekend {% endif %}
+
+      - name: "Warmtepomp Compressor"
+        unique_id: wp_compressor_text
+        icon: mdi:engine
+        state: >
+          {% set bits = states('sensor.warmtepomp_output_bits') | int(0) %}
+          {{ "AAN" if bits | bitwise_and(1) else "UIT" }}
+
+      - name: "Warmtepomp Waterpomp"
+        unique_id: wp_waterpump_text
+        icon: mdi:pump
+        state: >
+          {% set bits = states('sensor.warmtepomp_output_bits') | int(0) %}
+          {{ "AAN" if bits | bitwise_and(8) else "UIT" }}
+
+      - name: "Warmtepomp Ventilator Status"
+        unique_id: wp_fan_text
+        icon: mdi:fan
+        state: >
+          {% set bits = states('sensor.warmtepomp_output_bits') | int(0) %}
+          {% if bits | bitwise_and(2) %} Hoog
+          {% elif bits | bitwise_and(4) %} Laag
+          {% else %} Uit {% endif %}
+
+      - name: "Warmtepomp DeltaT Water"
+        unique_id: wp_delta_t
+        unit_of_measurement: "°C"
+        device_class: temperature
+        icon: mdi:delta
+        state: >
+          {% set i = states('sensor.warmtepomp_t02_inlaat_water') | float(0) %}
+          {% set o = states('sensor.warmtepomp_t03_uitlaat_water') | float(0) %}
+          {{ (o - i) | round(1) }}
+
+      # VERMOGEN berekend via V*A (register 2056 geeft vaste waarde)
+      - name: "Warmtepomp Vermogen Berekend"
+        unique_id: wp_power_calc
+        unit_of_measurement: "W"
+        device_class: power
+        state_class: measurement
+        icon: mdi:lightning-bolt
+        state: >
+          {% set v = states('sensor.warmtepomp_spanning') | float(0) %}
+          {% set a = states('sensor.warmtepomp_stroom') | float(0) %}
+          {% if v > 0 and a > 0 %}
+            {{ (v * a) | round(0) }}
+          {% else %}
+            0
+          {% endif %}
+
+      - name: "Warmtepomp Fout Aanwezig"
+        unique_id: wp_fault_present
+        icon: mdi:alert-circle
+        state: >
+          {% set f1 = states('sensor.warmtepomp_fout_register_1_2') | int(0) %}
+          {% set f2 = states('sensor.warmtepomp_fout_register_2_2') | int(0) %}
+          {% set f3 = states('sensor.warmtepomp_fout_register_3_2') | int(0) %}
+          {{ "JA ⚠️" if (f1 + f2 + f3) > 0 else "Geen" }}
+
+      - name: "Warmtepomp Stil Modus Tekst"
+        unique_id: wp_silent_text
+        icon: mdi:volume-off
+        state: >
+          {% set s = states('sensor.warmtepomp_stille_modus_status') | int(0) %}
+          {{ "Stil 🔇" if s == 1 else "Normaal 🔊" }}

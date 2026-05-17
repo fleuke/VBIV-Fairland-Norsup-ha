@@ -1,0 +1,196 @@
+title: Warmtepomp
+views:
+  - title: Warmtepomp
+    icon: mdi:heat-pump
+    cards:
+
+      - type: horizontal-stack
+        cards:
+
+          - type: thermostat
+            entity: climate.pool_warmtepomp_klimaat
+            name: Pool Warmtepomp
+
+          - type: entities
+            title: 🔥 Status
+            entities:
+              - entity: sensor.warmtepomp_modus_tekst
+                name: Modus
+                icon: mdi:heat-pump
+              - entity: switch.warmtepomp_hoofdschakelaar
+                name: AAN / UIT
+                icon: mdi:power
+              - entity: input_select.warmtepomp_modus
+                name: Werkingsmodus
+                icon: mdi:cog
+              - entity: switch.warmtepomp_stille_modus_3
+                name: Stille Modus
+                icon: mdi:volume-off
+              - type: divider
+              - entity: sensor.warmtepomp_compressor
+                name: Compressor
+                icon: mdi:engine
+              - entity: sensor.warmtepomp_waterpomp
+                name: Waterpomp
+                icon: mdi:pump
+              - entity: sensor.warmtepomp_ventilator_status
+                name: Ventilator
+                icon: mdi:fan
+              - entity: sensor.warmtepomp_stil_modus_tekst
+                name: Stil Status
+                icon: mdi:volume-off
+              - type: divider
+              - entity: sensor.warmtepomp_fout_aanwezig
+                name: Fouten
+                icon: mdi:alert-circle
+
+      - type: horizontal-stack
+        cards:
+
+          - type: entities
+            title: 🎯 Setpoints Instellen
+            entities:
+              - entity: input_number.warmtepomp_setpoint_verwarmen
+                name: Verwarmen
+                icon: mdi:thermometer-chevron-up
+              - entity: input_number.warmtepomp_setpoint_koelen
+                name: Koelen
+                icon: mdi:thermometer-chevron-down
+              - entity: input_number.warmtepomp_setpoint_auto
+                name: Auto
+                icon: mdi:thermometer-auto
+              - type: divider
+              - entity: sensor.warmtepomp_setpoint_huidig
+                name: Huidig actief
+              - entity: sensor.warmtepomp_t15_antivorst
+                name: Antivorst grens
+                icon: mdi:snowflake-alert
+
+          - type: entities
+            title: ⚙️ Modus Geheugen
+            entities:
+              - entity: sensor.warmtepomp_setpoint_verwarmen
+                name: "Verwarmen (R02)"
+                icon: mdi:fire
+              - entity: sensor.warmtepomp_setpoint_auto
+                name: "Automatisch (R03)"
+                icon: mdi:autorenew
+              - entity: sensor.warmtepomp_setpoint_koelen
+                name: "Koelen (R01)"
+                icon: mdi:snowflake
+              - type: divider
+              - entity: sensor.warmtepomp_instelling_modus
+                name: "Register Modus (0=K 1=V 2=A)"
+              - entity: sensor.warmtepomp_stille_modus_status
+                name: "Register Stil (0=nee 1=ja)"
+
+      - type: horizontal-stack
+        cards:
+
+          - type: entities
+            title: 💧 Water
+            entities:
+              - entity: sensor.warmtepomp_t02_inlaat_water
+                name: Inlaat (T02)
+                icon: mdi:water-thermometer
+              - entity: sensor.warmtepomp_t03_uitlaat_water
+                name: Uitlaat (T03)
+                icon: mdi:water-thermometer-outline
+              - entity: sensor.warmtepomp_deltat_water
+                name: ΔT Water
+                icon: mdi:delta
+              - entity: sensor.warmtepomp_t05_buiten
+                name: Buiten (T05)
+                icon: mdi:thermometer
+
+          - type: entities
+            title: 🔧 Technisch
+            entities:
+              - entity: sensor.warmtepomp_t06_persgas
+                name: Persgas (T06)
+                icon: mdi:gas-burner
+              - entity: sensor.warmtepomp_t01_zuiggas
+                name: Zuiggas (T01)
+              - entity: sensor.warmtepomp_t04_coil
+                name: Coil (T04)
+              - entity: sensor.warmtepomp_t11_superheat
+                name: Superheat (T11)
+              - entity: sensor.warmtepomp_ipm_temperatuur
+                name: IPM Module
+
+      - type: entities
+        title: ⚡ Elektriciteit
+        entities:
+          - entity: sensor.warmtepomp_vermogen_berekend
+            name: Vermogen (V×A)
+            icon: mdi:lightning-bolt
+          - entity: sensor.warmtepomp_spanning
+            name: Spanning
+            icon: mdi:flash
+          - entity: sensor.warmtepomp_stroom
+            name: Stroom
+            icon: mdi:current-ac
+          - entity: sensor.warmtepomp_compressor_frequentie_2
+            name: Compressor Frequentie
+            icon: mdi:sine-wave
+          - entity: sensor.warmtepomp_max_frequentie
+            name: Max Frequentie
+            icon: mdi:speedometer
+
+      - type: entities
+        title: ⚙️ Mechanisch
+        entities:
+          - entity: sensor.warmtepomp_ventilator_1
+            name: Ventilator 1 RPM
+            icon: mdi:fan
+          - entity: sensor.warmtepomp_ventilator_2
+            name: Ventilator 2 RPM
+            icon: mdi:fan
+          - entity: sensor.warmtepomp_druk
+            name: Druksensor
+            icon: mdi:gauge
+          - entity: sensor.warmtepomp_eev_positie
+            name: EEV Klep Positie
+            icon: mdi:valve
+
+      - type: history-graph
+        title: 🌡️ Watertemperaturen (24u)
+        hours_to_show: 24
+        refresh_interval: 60
+        entities:
+          - entity: sensor.warmtepomp_t02_inlaat_water
+            name: Inlaat
+          - entity: sensor.warmtepomp_t03_uitlaat_water
+            name: Uitlaat
+          - entity: sensor.warmtepomp_t05_buiten
+            name: Buiten
+
+      - type: history-graph
+        title: ⚡ Vermogen (24u)
+        hours_to_show: 24
+        refresh_interval: 60
+        entities:
+          - entity: sensor.warmtepomp_vermogen_berekend
+            name: Vermogen W
+
+      - type: history-graph
+        title: ⚙️ Compressor (24u)
+        hours_to_show: 24
+        refresh_interval: 60
+        entities:
+          - entity: sensor.warmtepomp_compressor_frequentie_2
+            name: Freq Hz
+          - entity: sensor.warmtepomp_stroom
+            name: Stroom A
+
+      - type: entities
+        title: 🔧 Diagnose
+        entities:
+          - entity: sensor.warmtepomp_fout_aanwezig
+            name: Fout Aanwezig
+          - entity: sensor.warmtepomp_fout_register_1_2
+            name: Register 1 (P/E)
+          - entity: sensor.warmtepomp_fout_register_2_2
+            name: Register 2 (F)
+          - entity: sensor.warmtepomp_fout_register_3_2
+            name: Register 3
