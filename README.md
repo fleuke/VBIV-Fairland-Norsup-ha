@@ -206,7 +206,7 @@ The required EW11A mode **depends on what you are connecting with**:
 
 Set the EW11A to **Modbus TCP mode**:
 
-EW11A web interface → Advanced Settings → Transfer Protocol → **Modbus_TCP_Protocol**
+EW11A web interface → Serial Port Settings → Protocol -> **Modbus**
 
 **Symptoms of wrong mode (None instead of Modbus TCP):**
 ```
@@ -218,7 +218,7 @@ modbus zwembad_warmtepomp: Not connected
 
 Set the EW11A to **None / Transparent mode**:
 
-EW11A web interface → Advanced Settings → Transfer Protocol → **None**
+EW11A web interface → Serial Port Settings → Protocol → **None**
 
 In None mode the EW11A passes raw bytes through without wrapping them in Modbus TCP framing. The Python scripts build the raw Modbus RTU frames themselves and send them directly over a TCP socket — so the EW11A must not add any extra framing.
 
