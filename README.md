@@ -324,7 +324,7 @@ The dashboard includes:
 
 ## Compatible brands
 
-The VBIV is a product of **VB Klimaattechniek** (Netherlands), acquired by **Pollet Pool Group (PPG)** in 2021. The pump uses the **PC1004 mainboard** with a standard Modbus RTU protocol over RS485 via the CN8 connector.
+The VBIV is a product of **VB Klimaattechniek** (Netherlands), acquired by **Pollet Pool Group (PPG)** in 2021. The pump uses the **PC1004 mainboard** with a standard Modbus RTU protocol over RS485 via the CN13 connector.
 
 The same registers and protocol are used by other brands sharing the same mainboard or controller. Based on community experience, the following brands are likely (at least partially) compatible:
 
